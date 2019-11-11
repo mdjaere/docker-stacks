@@ -39,7 +39,7 @@ WORKDIR /home/$NB_USER/mdtoolbox
 RUN octave --no-gui --eval "make"
 
 # path setting for interactive octave use
-RUN ["echo", "addpath\(\'/home/$NB_USER/mdtoolbox/mdtoolbox\'\)\;", ">/home/$NB_USER/.octaverc"]
+RUN echo addpath\(\'/home/$NB_USER/mdtoolbox/mdtoolbox\'\)\; >/home/$NB_USER/.octaverc
 
 # RUN pip install --upgrade pip
 # RUN pip install octave_kernel \
