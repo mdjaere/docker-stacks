@@ -1,5 +1,5 @@
 FROM mdjaere/datascience-notebook-gpu
-MAINTAINER Martin Jaere <martin.jaere11@imperial.ac.uk>
+LABEL maintainer="Martin Jaere <martin.jaere11@imperial.ac.uk>"
 
 # FROM https://github.com/ymatsunaga/docker-octave
 # MAINTAINER Yasuhiro Matsunaga <ymatsunaga@riken.jp>
