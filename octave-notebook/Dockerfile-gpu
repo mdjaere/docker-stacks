@@ -1,28 +1,53 @@
 FROM mdjaere/datascience-notebook-gpu
 MAINTAINER Martin Jaere <martin.jaere11@imperial.ac.uk>
 
+# FROM https://github.com/ymatsunaga/docker-octave
+# MAINTAINER Yasuhiro Matsunaga <ymatsunaga@riken.jp>
+
 USER root
 ENV DEBIAN_FRONTEND noninteractive
 ENV OMP_NUM_THREADS 8
 
-RUN apt-get -y update \
- && apt-get -y install \
-      less \
-      gnuplot \
-      libnetcdf-dev \
-      octave \
-      liboctave-dev \
-      git \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+## MSMBuilder
 
-USER jovyan
-WORKDIR /home/jovyan
 
-RUN octave --no-gui --eval "pkg install -verbose -forge -auto netcdf"
-RUN octave --no-gui --eval "pkg install -verbose -forge -auto io"
-RUN octave --no-gui --eval "pkg install -verbose -forge -auto statistics"
+## MDToolbox https://github.com/ymatsunaga/mdtoolbox
+# path setting for octave_kernel in jupyter
+ENV OCTAVE_CLI_OPTIONS "--path /home/$NB_USER/mdtoolbox/mdtoolbox"
 
-RUN pip --no-cache install octave_kernel
+RUN apt-get update \
+     && apt-get -yq install \
+     less \
+     gnuplot \
+     libnetcdf-dev \
+     octave \
+     liboctave-dev \
+     git \
+     && apt-get clean \
+     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /home/jovyan/work
+USER $NB_USER
+WORKDIR /home/$NB_USER
+
+RUN octave --no-gui --eval "pkg install -verbose -forge -auto netcdf" \
+     && octave --no-gui --eval "pkg install -verbose -forge -auto io" \
+     && octave --no-gui --eval "pkg install -verbose -forge -auto statistics"
+
+RUN git clone https://github.com/ymatsunaga/mdtoolbox.git
+
+WORKDIR /home/$NB_USER/mdtoolbox
+RUN octave --no-gui --eval "make"
+
+# path setting for interactive octave use
+RUN ["echo", "addpath\(\'/home/$NB_USER/mdtoolbox/mdtoolbox\'\)\;", ">/home/$NB_USER/.octaverc"]
+
+# RUN pip install --upgrade pip
+# RUN pip install octave_kernel \
+#  && python -m octave_kernel.install
+
+RUN pip --no-cache-dir install octave_kernel && \
+     rm -rf /home/$NB_USER/.local && \
+     fix-permissions $CONDA_DIR && \
+     fix-permissions /home/$NB_USER
+
+WORKDIR /home/$NB_USER
