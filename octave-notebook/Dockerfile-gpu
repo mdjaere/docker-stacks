@@ -83,8 +83,8 @@ USER root
 # ENV DEBIAN_FRONTEND noninteractive
 # ENV OMP_NUM_THREADS 8
 
-COPY --from=compile-image /src/octave-5.2.0/.build /tmp/
-WORKDIR /tmp/.build
+WORKDIR /tmp/octave-build
+COPY --from=compile-image /src/octave-5.2.0/.build/ .
 RUN ls -lah
 RUN run-octave --version
 RUN make install
