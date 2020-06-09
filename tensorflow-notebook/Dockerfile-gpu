@@ -1,15 +1,12 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-#ARG BASE_CONTAINER=jupyter/scipy-notebook
-#FROM $BASE_CONTAINER
-FROM mdjaere/scipy-notebook-gpu
+ARG BASE_CONTAINER=mdjaere/scipy-notebook-gpu
+FROM $BASE_CONTAINER
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
 
 # Install Tensorflow
-RUN conda install --quiet --yes \
-    'tensorflow-gpu=1.11*' \
-    'keras=2.2*' && \
-    conda clean -tipsy && \
+RUN pip install --quiet --no-cache-dir \
+    'tensorflow==2.2.0' && \
     fix-permissions $CONDA_DIR && \
     fix-permissions /home/$NB_USER

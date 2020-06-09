@@ -41,10 +41,6 @@ RUN octave --no-gui --eval "make"
 # path setting for interactive octave use
 RUN echo addpath\(\'/home/$NB_USER/mdtoolbox/mdtoolbox\'\)\; >/home/$NB_USER/.octaverc
 
-# RUN pip install --upgrade pip
-# RUN pip install octave_kernel \
-#  && python -m octave_kernel.install
-
 RUN pip --no-cache-dir install octave_kernel && \
      rm -rf /home/$NB_USER/.local && \
      fix-permissions $CONDA_DIR && \
