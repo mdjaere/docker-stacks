@@ -68,7 +68,7 @@ RUN wget https://ftpmirror.gnu.org/octave/octave-5.2.0.tar.gz && \
 RUN cd /src/octave-5.2.0 && \
      mkdir .build && \
      cd .build && \
-     ./../configure --prefix=$HOME/my_octave && \
+     ./../configure --prefix=/usr/local --without-opengl && \
      make -j2  && \
      make check&& \
      make install
@@ -83,9 +83,10 @@ USER root
 ENV DEBIAN_FRONTEND noninteractive
 ENV OMP_NUM_THREADS 8
 
-WORKDIR /src
 COPY --from=compile-image /src/.build /src/
-RUN /src/run-octave --version
+WORKDIR /src
+RUN run-octave --version
+RUN make install
 
 ## MDToolbox https://github.com/ymatsunaga/mdtoolbox
 # path setting for octave_kernel in jupyter
