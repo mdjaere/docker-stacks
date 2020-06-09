@@ -69,7 +69,7 @@ RUN cd /src/octave-5.2.0 && \
      mkdir .build && \
      cd .build && \
      ./../configure --prefix=/usr/local --without-opengl && \
-     make -j2  && \
+     make -j2 CFLAGS=-O CXXFLAGS=-O LDFLAGS= && \
      make check && \
      make install
 
