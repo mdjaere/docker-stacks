@@ -83,6 +83,18 @@ USER root
 ENV DEBIAN_FRONTEND noninteractive
 ENV OMP_NUM_THREADS 8
 
+RUN apt-get update \
+     && apt-get -yq install \
+     # less \
+     make \
+     gnuplot \
+     # libnetcdf-dev \
+     # octave \
+     # liboctave-dev \
+     # git \
+     && apt-get clean \
+     && rm -rf /var/lib/apt/lists/*
+     
 COPY --from=compile-image /src/.build /src/
 WORKDIR /src
 RUN run-octave --version
@@ -92,16 +104,6 @@ RUN make install
 # path setting for octave_kernel in jupyter
 # ENV OCTAVE_CLI_OPTIONS "--path /home/$NB_USER/mdtoolbox/mdtoolbox"
 
-RUN apt-get update \
-     && apt-get -yq install \
-     # less \
-     gnuplot \
-     # libnetcdf-dev \
-     # octave \
-     # liboctave-dev \
-     # git \
-     && apt-get clean \
-     && rm -rf /var/lib/apt/lists/*
 
 USER $NB_USER
 WORKDIR /home/$NB_USER
