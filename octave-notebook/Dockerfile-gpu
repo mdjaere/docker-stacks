@@ -68,9 +68,9 @@ RUN wget https://ftpmirror.gnu.org/octave/octave-5.2.0.tar.gz && \
 RUN cd /src/octave-5.2.0 && \
      mkdir .build && \
      cd .build && \
-     ./../configure --prefix=/usr/local --without-opengl && \
+     ./../configure --prefix=/usr/local --without-opengl --enable-shared=false && \
      make -j2  && \
-     make check&& \
+     make check && \
      make install
 
 FROM mdjaere/datascience-notebook-gpu
@@ -123,12 +123,12 @@ RUN apt-get update \
      # libsndfile1-dev \
      # llvm-dev \
      # lpr \
-     texinfo \
+     # texinfo \
      # libgl1-mesa-dev \
      # libosmesa6-dev \
      # pstoedit \
      # portaudio19-dev \
-     libqhull-dev \
+     # libqhull-dev \
      # libqrupdate-dev \
      # libqscintilla2-dev \
      # libsuitesparse-dev \
@@ -157,11 +157,9 @@ RUN apt-get update \
 
 RUN make install
 
-
 ## MDToolbox https://github.com/ymatsunaga/mdtoolbox
 # path setting for octave_kernel in jupyter
 # ENV OCTAVE_CLI_OPTIONS "--path /home/$NB_USER/mdtoolbox/mdtoolbox"
-
 
 USER $NB_USER
 WORKDIR /home/$NB_USER
