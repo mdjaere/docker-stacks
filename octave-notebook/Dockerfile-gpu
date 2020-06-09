@@ -68,7 +68,7 @@ RUN wget https://ftpmirror.gnu.org/octave/octave-5.2.0.tar.gz && \
 RUN cd /src/octave-5.2.0 && \
      mkdir .build && \
      cd .build && \
-     ./../configure --prefix=/usr/local --without-opengl --enable-shared=false && \
+     ./../configure --prefix=/usr/local --without-opengl && \
      make -j2  && \
      make check && \
      make install
@@ -94,48 +94,48 @@ RUN apt-get update \
      # less \
      # make \
      gnuplot \
-     # libnetcdf-dev \
+     libnetcdf-dev \
      # octave \
-     # liboctave-dev \
+     liboctave-dev \
      # git \     
      # gcc \
      # g++ \
      # gfortran \
      # make \
-     # libblas-dev \
-     # liblapack-dev \
-     # libpcre3-dev \
-     # libarpack2-dev \
-     # libcurl4-gnutls-dev \
+     libblas-dev \
+     liblapack-dev \
+     libpcre3-dev \
+     libarpack2-dev \
+     libcurl4-gnutls-dev \
      # epstool \
-     # libfftw3-dev \
+     libfftw3-dev \
      # transfig \
-     # libfltk1.3-dev \
-     # libfontconfig1-dev \
-     # libfreetype6-dev \
-     # libgl2ps-dev \
-     # libglpk-dev \
-     # libreadline-dev \
+     libfltk1.3-dev \
+     libfontconfig1-dev \
+     libfreetype6-dev \
+     libgl2ps-dev \
+     libglpk-dev \
+     libreadline-dev \
      # gnuplot-x11 \
-     # libgraphicsmagick++1-dev \
-     # libhdf5-serial-dev \
+     libgraphicsmagick++1-dev \
+     libhdf5-serial-dev \
      # openjdk-8-jdk \
-     # libsndfile1-dev \
-     # llvm-dev \
+     libsndfile1-dev \
+     llvm-dev \
      # lpr \
      # texinfo \
-     # libgl1-mesa-dev \
-     # libosmesa6-dev \
+     libgl1-mesa-dev \
+     libosmesa6-dev \
      # pstoedit \
-     # portaudio19-dev \
-     # libqhull-dev \
-     # libqrupdate-dev \
-     # libqscintilla2-dev \
-     # libsuitesparse-dev \
+     portaudio19-dev \
+     libqhull-dev \
+     libqrupdate-dev \
+     libqscintilla2-dev \
+     libsuitesparse-dev \
      # texlive \
      # texlive-generic-recommended \
-     # libxft-dev \
-     # zlib1g-dev \
+     libxft-dev \
+     zlib1g-dev \
      # autoconf \
      # automake \
      # bison \
@@ -148,14 +148,15 @@ RUN apt-get update \
      # perl \
      # rsync \
      # tar \
-     # qtbase5-dev \
-     # qttools5-dev \
-     # qttools5-dev-tools \
-     # libqscintilla2-qt5-dev \
+     qtbase5-dev \
+     qttools5-dev \
+     qttools5-dev-tools \
+     libqscintilla2-qt5-dev \
      && apt-get clean \
      && rm -rf /var/lib/apt/lists/*
 
-RUN make install
+RUN make check && \
+     make install
 
 ## MDToolbox https://github.com/ymatsunaga/mdtoolbox
 # path setting for octave_kernel in jupyter
