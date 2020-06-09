@@ -1,3 +1,77 @@
+FROM ubuntu:18.04 AS compile-image
+
+WORKDIR /src
+
+RUN apt-get update \
+     && apt-get -yq install \
+     gcc \
+     g++ \
+     gfortran \
+     make \
+     libblas-dev \
+     liblapack-dev \
+     libpcre3-dev \
+     libarpack2-dev \
+     libcurl4-gnutls-dev \
+     epstool \
+     libfftw3-dev \
+     transfig \
+     libfltk1.3-dev \
+     libfontconfig1-dev \
+     libfreetype6-dev \
+     libgl2ps-dev \
+     libglpk-dev \
+     libreadline-dev \
+     gnuplot-x11 \
+     libgraphicsmagick++1-dev \
+     libhdf5-serial-dev \
+     openjdk-8-jdk \
+     libsndfile1-dev \
+     llvm-dev \
+     lpr \
+     texinfo \
+     libgl1-mesa-dev \
+     libosmesa6-dev \
+     pstoedit \
+     portaudio19-dev \
+     libqhull-dev \
+     libqrupdate-dev \
+     libqscintilla2-dev \
+     libsuitesparse-dev \
+     texlive \
+     texlive-generic-recommended \
+     libxft-dev \
+     zlib1g-dev \
+     autoconf \
+     automake \
+     bison \
+     flex \
+     gperf \
+     gzip \
+     icoutils \
+     librsvg2-bin \
+     libtool \
+     perl \
+     rsync \
+     tar \
+     qtbase5-dev \
+     qttools5-dev \
+     qttools5-dev-tools \
+     libqscintilla2-qt5-dev \
+     && apt-get clean \
+     && rm -rf /var/lib/apt/lists/*
+
+RUN wget https://ftpmirror.gnu.org/octave/octave-5.2.0.tar.gz && \
+     tar -xzf octave-5.2.0.tar.gz && \
+     cd octave-5.2.0
+
+RUN mkdir .build && \
+     cd .build && \
+     ./../configure --prefix=$HOME/my_octave && \
+     make -j2  && \
+     make check&& \
+     make install
+
 FROM mdjaere/datascience-notebook-gpu
 LABEL maintainer="Martin Jaere <martin.jaere11@imperial.ac.uk>"
 
@@ -8,21 +82,22 @@ USER root
 ENV DEBIAN_FRONTEND noninteractive
 ENV OMP_NUM_THREADS 8
 
-## MSMBuilder
-
+WORKDIR /src
+COPY --from=compile-image /src/.build /src/
+RUN /src/run-octave --version
 
 ## MDToolbox https://github.com/ymatsunaga/mdtoolbox
 # path setting for octave_kernel in jupyter
-ENV OCTAVE_CLI_OPTIONS "--path /home/$NB_USER/mdtoolbox/mdtoolbox"
+# ENV OCTAVE_CLI_OPTIONS "--path /home/$NB_USER/mdtoolbox/mdtoolbox"
 
 RUN apt-get update \
      && apt-get -yq install \
-     less \
+     # less \
      gnuplot \
-     libnetcdf-dev \
-     octave \
-     liboctave-dev \
-     git \
+     # libnetcdf-dev \
+     # octave \
+     # liboctave-dev \
+     # git \
      && apt-get clean \
      && rm -rf /var/lib/apt/lists/*
 
