@@ -92,7 +92,7 @@ RUN apt-get update \
      # less \
      # make \
      gnuplot \
-     # libnetcdf-dev \
+     libnetcdf-dev \
      ##### octave \
      # liboctave-dev \
      # git \
@@ -154,20 +154,21 @@ RUN apt-get update \
      && apt-get clean \
      && rm -rf /var/lib/apt/lists/*
 
-RUN make check && \
-     make install
+# RUN make check
+RUN make install
 
 ## MDToolbox https://github.com/ymatsunaga/mdtoolbox
 # path setting for octave_kernel in jupyter
 # ENV OCTAVE_CLI_OPTIONS "--path /home/$NB_USER/mdtoolbox/mdtoolbox"
 
+RUN chown $NB_USER /home/$NB_USER/.octave_packages
 USER $NB_USER
 WORKDIR /home/$NB_USER
 
-RUN octave --no-gui --eval "pkg install -verbose -forge -auto netcdf" \
-     && octave --no-gui --eval "pkg install -verbose -forge -auto io" \
-     && octave --no-gui --eval "pkg install -verbose -forge -auto statistics" \
-     && octave --no-gui --eval "pkg install -verbose -forge -auto financial"
+RUN octave --no-gui --eval "pkg install -verbose -forge netcdf" \
+     && octave --no-gui --eval "pkg install -verbose -forge io" \
+     && octave --no-gui --eval "pkg install -verbose -forge statistics" \
+     && octave --no-gui --eval "pkg install -verbose -forge financial"
 
 # RUN git clone https://github.com/ymatsunaga/mdtoolbox.git
 
