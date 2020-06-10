@@ -161,7 +161,7 @@ RUN make install
 # path setting for octave_kernel in jupyter
 # ENV OCTAVE_CLI_OPTIONS "--path /home/$NB_USER/mdtoolbox/mdtoolbox"
 
-RUN chown $NB_USER /home/$NB_USER/.octave_packages
+RUN chown $NB_USER /home/$NB_USER/*
 USER $NB_USER
 WORKDIR /home/$NB_USER
 
