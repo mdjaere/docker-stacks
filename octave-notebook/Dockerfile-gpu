@@ -178,9 +178,11 @@ RUN octave --no-gui --eval "pkg install -verbose -forge netcdf" \
 # # path setting for interactive octave use
 # RUN echo addpath\(\'/home/$NB_USER/mdtoolbox/mdtoolbox\'\)\; >/home/$NB_USER/.octaverc
 
-RUN pip --no-cache-dir install octave_kernel && \
-     rm -rf /home/$NB_USER/.local && \
-     fix-permissions $CONDA_DIR && \
-     fix-permissions /home/$NB_USER
+RUN pip --no-cache-dir install \
+     octave_kernel \
+     jupyterlab-git \
+     && rm -rf /home/$NB_USER/.local \
+     && fix-permissions $CONDA_DIR \
+     && fix-permissions /home/$NB_USER
 
 WORKDIR /home/$NB_USER
